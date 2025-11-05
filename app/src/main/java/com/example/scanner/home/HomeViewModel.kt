@@ -5,6 +5,9 @@ import com.example.scanner.OpenFoodFactApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -16,8 +19,7 @@ sealed class MainViewModelState {
 
 }
 data class Product( val barcode: String)
-class HomeViewModel : ViewModel() {
-    val viewModel = HomeViewModel()
+class HomeViewModel(val api: OpenFoodFactApi) : ViewModel() {
 
     private val State = MutableStateFlow<MainViewModelState>(MainViewModelState.Loading)
     val uiState = State.asStateFlow()
@@ -26,16 +28,7 @@ class HomeViewModel : ViewModel() {
     val isDebugMode = DebugMode.asStateFlow()
 
 
-    val retrofit = Retrofit.Builder()
-        .baseUrl("https://world.openfoodfacts.org/api/v2/")
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
 
-    val api = retrofit.create(OpenFoodFactApi::class.java)
-
-    findViewById<Button>(R.id.searchButton).setOnClickListener {
-        viewModel.searchProduct("34567")
-    }
 
     fun onScanResult(scannedCode: String?) {
         if (scannedCode != null) {
@@ -47,5 +40,30 @@ class HomeViewModel : ViewModel() {
     }
     fun toggleDebugMode() {
         DebugMode.update { !it }
+    }
+
+    fun searchProduct(barcode: String) {
+
+
+        // Call api
+        val call = api.getProduct("1234")
+
+
+        call.enqueue(object : Callback<Product> {
+            override fun onResponse(call: Call<Product>, response: Response<Product>) {
+                val product = response.body()!!
+
+
+               // val callMedia = apiMedia.searchPage(product.name)
+                stateLiveData.value = com.example.retrofitapp.MainViewModelState.Success(product)
+//                Log.i(TAG, "onResponse: $product")
+            }
+
+            override fun onFailure(call: Call<Product>, t: Throwable) {
+//                Log.e(TAG, "onFailure: ", t)
+                stateLiveData.value = com.example.retrofitapp.MainViewModelState.Failure("error")
+            }
+
+        })
     }
 }

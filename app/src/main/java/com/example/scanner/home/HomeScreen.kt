@@ -25,12 +25,25 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.scanner.OpenFoodFactApi
 import com.example.scanner.R
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+
+
+val retrofit = Retrofit.Builder()
+    .baseUrl("https://world.openfoodfacts.org/api/v2/")
+    .addConverterFactory(GsonConverterFactory.create())
+    .build()
+
+val api = retrofit.create(OpenFoodFactApi::class.java)
 
 @Composable
-fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
+fun HomeScreen(homeViewModel: HomeViewModel = viewModel {
+    HomeViewModel(api)
+}) {
     val context = LocalContext.current
     val uiState by homeViewModel.uiState.collectAsState()
     val isDebugMode by homeViewModel.isDebugMode.collectAsState()
