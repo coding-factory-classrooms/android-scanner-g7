@@ -51,7 +51,8 @@ dependencies {
 
     implementation(libs.zxing.android.embedded)
     implementation(libs.gson)
-
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
