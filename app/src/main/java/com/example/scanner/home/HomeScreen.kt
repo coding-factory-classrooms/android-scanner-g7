@@ -6,57 +6,80 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.scanner.R
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
+    val uiState by homeViewModel.uiState.collectAsState()
 
-    Row(
-        modifier = Modifier.padding(all = 16.dp)
-    ) {
-        Image(
-            painter = painterResource(R.drawable.logo),
-            contentDescription = "Logo",
-            modifier = Modifier
-                .size(50.dp)
-                .clip(RoundedCornerShape(10.dp))
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Column(
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Button(onClick = {
-                val options = ScanOptions()
-                options.setDesiredBarcodeFormats(ScanOptions.ALL_CODE_TYPES)
-                options.setPrompt("scan")
-                options.setBeepEnabled(true)
-                options.setBarcodeImageEnabled(true)
-                barcodeLauncher.launch(options)
-            }) {
-                Text("Start a scan")
-            }
-            Text(
-                text = scannedCode ?: "Aucun code scanné",
-                style = MaterialTheme.typography.bodyLarge)
-        }
+    val barcodeLauncher = rememberLauncherForActivityResult(ScanContract()) { result ->
+        homeViewModel.onScanResult(result.contents)
     }
 
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Row(
+            modifier = Modifier.padding(bottom = 16.dp)
+        ) {
+            Image(
+                painter = painterResource(R.drawable.logo),
+                contentDescription = "Logo",
+                modifier = Modifier
+                    .size(50.dp)
+                    .clip(RoundedCornerShape(10.dp))
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+        }
+
+        Button(onClick = {
+            val options = ScanOptions()
+            options.setDesiredBarcodeFormats(ScanOptions.ALL_CODE_TYPES)
+            options.setPrompt("Scan a barcode")
+            options.setBeepEnabled(false)
+            options.setBarcodeImageEnabled(true)
+            barcodeLauncher.launch(options)
+        }) {
+            Text("Start a scan")
+        }
+
+        Spacer(modifier = Modifier.padding(8.dp))
+
+        when (val state = uiState) {
+            is MainViewModelState.Loading -> {
+            }
+            is MainViewModelState.Success -> {
+                Text("Scanned code: ${state.bottle.barcode}\n")
+            }
+            is MainViewModelState.FailureScan -> {
+                Text(state.message)
+            }
+            is MainViewModelState.FailureBottle -> {
+                Text(state.message)
+            }
+        }
+    }
 }

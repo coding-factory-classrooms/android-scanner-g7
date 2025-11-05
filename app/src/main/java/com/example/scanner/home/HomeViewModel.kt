@@ -1,14 +1,8 @@
 package com.example.scanner.home
 
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.journeyapps.barcodescanner.ScanContract
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 sealed class MainViewModelState {
     data object Loading : MainViewModelState()
@@ -17,16 +11,18 @@ sealed class MainViewModelState {
     data class FailureBottle(val message: String) : MainViewModelState()
 
 }
-
+data class Product( val barcode: String)
 class HomeViewModel : ViewModel() {
 
-    var scannedCode = mutableStateOf<String?>(null)
+    private val State = MutableStateFlow<MainViewModelState>(MainViewModelState.Loading)
+    val uiState = State.asStateFlow()
 
-    @Composable
-    fun getCodeBarre(): MutableState<String?> {
-        val barcodeLauncher = rememberLauncherForActivityResult(ScanContract()) { result ->
-            scannedCode = result.contents
+    fun onScanResult(scannedCode: String?) {
+        if (scannedCode != null) {
+            val product = Product(barcode = scannedCode)
+            State.value = MainViewModelState.Success(product)
+        } else {
+            State.value = MainViewModelState.FailureScan("Scan failed")
         }
-        return scannedCode
     }
 }
