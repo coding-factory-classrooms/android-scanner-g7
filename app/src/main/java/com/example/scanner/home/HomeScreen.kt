@@ -29,11 +29,6 @@ import com.journeyapps.barcodescanner.ScanOptions
 @Composable
 fun HomeScreen() {
 
-    var scannedCode by remember { mutableStateOf<String?>(null) }
-    val barcodeLauncher = rememberLauncherForActivityResult(ScanContract()) { result ->
-        scannedCode = result.contents
-    }
-
     Row(
         modifier = Modifier.padding(all = 16.dp)
     ) {
