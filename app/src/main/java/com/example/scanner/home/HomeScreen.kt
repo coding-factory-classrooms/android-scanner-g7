@@ -2,6 +2,7 @@ package com.example.scanner.home
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -30,6 +30,7 @@ import com.journeyapps.barcodescanner.ScanOptions
 @Composable
 fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
     val uiState by homeViewModel.uiState.collectAsState()
+    val isDebugMode by homeViewModel.isDebugMode.collectAsState()
 
     val barcodeLauncher = rememberLauncherForActivityResult(ScanContract()) { result ->
         homeViewModel.onScanResult(result.contents)
@@ -51,28 +52,37 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
                 modifier = Modifier
                     .size(50.dp)
                     .clip(RoundedCornerShape(10.dp))
+                    .clickable { homeViewModel.toggleDebugMode() }
             )
             Spacer(modifier = Modifier.width(8.dp))
         }
 
         Button(onClick = {
-            val options = ScanOptions()
-            options.setDesiredBarcodeFormats(ScanOptions.ALL_CODE_TYPES)
-            options.setPrompt("Scan a barcode")
-            options.setBeepEnabled(false)
-            options.setBarcodeImageEnabled(true)
-            barcodeLauncher.launch(options)
+            if (isDebugMode) {
+                homeViewModel.onScanResult("1234567890")
+            } else {
+                val options = ScanOptions()
+                options.setDesiredBarcodeFormats(ScanOptions.ALL_CODE_TYPES)
+                options.setPrompt("Scan a barcode")
+                options.setBeepEnabled(false)
+                options.setBarcodeImageEnabled(true)
+                barcodeLauncher.launch(options)
+            }
         }) {
             Text("Start a scan")
         }
 
         Spacer(modifier = Modifier.padding(8.dp))
 
+        if (isDebugMode) {
+            Text("Debug mode")
+        }
+
         when (val state = uiState) {
             is MainViewModelState.Loading -> {
             }
             is MainViewModelState.Success -> {
-                Text("Scanned code: ${state.bottle.barcode}\n")
+                Text("Scanned code: ${state.bottle.barcode}")
             }
             is MainViewModelState.FailureScan -> {
                 Text(state.message)

@@ -3,6 +3,7 @@ package com.example.scanner.home
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 sealed class MainViewModelState {
     data object Loading : MainViewModelState()
@@ -17,6 +18,9 @@ class HomeViewModel : ViewModel() {
     private val State = MutableStateFlow<MainViewModelState>(MainViewModelState.Loading)
     val uiState = State.asStateFlow()
 
+    private val DebugMode = MutableStateFlow(false)
+    val isDebugMode = DebugMode.asStateFlow()
+
     fun onScanResult(scannedCode: String?) {
         if (scannedCode != null) {
             val product = Product(barcode = scannedCode)
@@ -24,5 +28,8 @@ class HomeViewModel : ViewModel() {
         } else {
             State.value = MainViewModelState.FailureScan("Scan failed")
         }
+    }
+    fun toggleDebugMode() {
+        DebugMode.update { !it }
     }
 }
