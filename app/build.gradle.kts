@@ -74,8 +74,3 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
 }
 
-// Config for SDK 24+
-
-repositories {
-    mavenCentral()
-}
