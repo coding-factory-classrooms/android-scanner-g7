@@ -1,16 +1,15 @@
 package com.example.scanner
 import com.google.gson.annotations.SerializedName
-import java.net.URL
 
-data class Product(
-    val title : String,
-    val image: String,
-    val description: String,
-    val bar_code: String
-)
+//data class Product(
+//    val title : String,
+//    val image: String,
+//    val description: String,
+//    val bar_code: String
+//)
 
 val sampleProduct = listOf(
-    Product("1","2","3", "4")
+    Product("1","2","https://fr.wikipedia.org/wiki/Wikip%C3%A9dia:Accueil_principal#/media/Fichier:20220702_Araschnia_levana_02.jpg")
 )
 
 
@@ -18,12 +17,19 @@ val sampleProduct = listOf(
 /////////////////////////////////////// OpenFoodfact Call API //////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-data class InfoProduct (
+data class Product (
+    @SerializedName("_id")
     val id: String,
-    @SerializedName("product_name_fr")
-    val productNameFr: String,
+    @SerializedName("abbreviated_product_name_fr")
+    val abbreviatedProductNameFr: String,
     @SerializedName("image_front_url")
-    val imageFrontURL: URL
+    val imageFrontURL: String
+)
+
+data class ProductResponse(
+    val code: String,
+    val status: Int,
+    val product: Product
 )
 
 

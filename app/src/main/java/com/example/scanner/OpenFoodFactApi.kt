@@ -6,6 +6,6 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface OpenFoodFactApi {
-    @GET("products/{id}.json")
-    fun getProduct(@Path("id") barcode: String) : Call<Product>
+    @GET("product/{id}.json")
+    fun getProduct(@Path("id") barcode: String) : Call<ProductResponse>
 }

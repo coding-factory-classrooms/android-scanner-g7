@@ -49,7 +49,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel {
     val isDebugMode by homeViewModel.isDebugMode.collectAsState()
 
     val barcodeLauncher = rememberLauncherForActivityResult(ScanContract()) { result ->
-        homeViewModel.onScanResult(result.contents)
+        homeViewModel.searchProduct(result.contents)
     }
 
     Column(
@@ -75,7 +75,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel {
 
         Button(onClick = {
             if (isDebugMode) {
-                homeViewModel.onScanResult("1234567890")
+                homeViewModel.searchProduct("1234567890")
             } else {
                 val options = ScanOptions()
                 options.setDesiredBarcodeFormats(ScanOptions.ALL_CODE_TYPES)
@@ -98,7 +98,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel {
             is MainViewModelState.Loading -> {
             }
             is MainViewModelState.Success -> {
-                Text("Scanned code: ${state.bottle.barcode}")
+                Text("Scanned code: ${state}")
             }
             is MainViewModelState.FailureScan -> {
                 Toast.makeText(context, state.message, Toast.LENGTH_SHORT).show()
