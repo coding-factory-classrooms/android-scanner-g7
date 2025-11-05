@@ -1,8 +1,8 @@
 package com.example.scanner.product
 
 import androidx.lifecycle.ViewModel
-import com.example.scanner.user.Product
-import com.example.scanner.user.sampleProduct
+import com.example.scanner.Product
+import com.example.scanner.sampleProduct
 import kotlinx.coroutines.flow.MutableStateFlow
 
 sealed class ProductListUiState {

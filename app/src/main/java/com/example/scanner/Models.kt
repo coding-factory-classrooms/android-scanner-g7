@@ -1,13 +1,12 @@
-package com.example.scanner.user
-
-import android.media.Image
+package com.example.scanner
 
 data class Product(
     val title : String,
     val image: String,
     val description: String,
+    val bar_code: String
 )
 
 val sampleProduct = listOf(
-    Product("1","2","3")
+    Product("1","2","3", "4")
 )
