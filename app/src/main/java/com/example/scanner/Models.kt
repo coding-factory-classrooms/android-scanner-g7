@@ -10,6 +10,11 @@ data class Product(
 )
 
 val sampleProduct = listOf(
+    Product("1","2","3", "4"),
+    Product("salut toi","2","3", "4"),
+    Product("wesh c'est comment","2","3", "4"),
+
+
     Product("1","2","3", "4")
 )
 

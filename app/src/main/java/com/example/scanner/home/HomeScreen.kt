@@ -1,5 +1,6 @@
 package com.example.scanner.home
 
+import android.content.Intent
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.Image
@@ -26,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.scanner.R
+import com.example.scanner.product.ProductListActivity
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 
@@ -63,6 +65,8 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
         Button(onClick = {
             if (isDebugMode) {
                 homeViewModel.onScanResult("1234567890")
+                val intent = Intent(context, ProductListActivity::class.java)
+                context.startActivity(intent)
             } else {
                 val options = ScanOptions()
                 options.setDesiredBarcodeFormats(ScanOptions.ALL_CODE_TYPES)
