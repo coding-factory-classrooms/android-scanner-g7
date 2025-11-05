@@ -1,5 +1,6 @@
 package com.example.scanner.home
 
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -20,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -29,6 +31,7 @@ import com.journeyapps.barcodescanner.ScanOptions
 
 @Composable
 fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
+    val context = LocalContext.current
     val uiState by homeViewModel.uiState.collectAsState()
     val isDebugMode by homeViewModel.isDebugMode.collectAsState()
 
@@ -85,7 +88,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
                 Text("Scanned code: ${state.bottle.barcode}")
             }
             is MainViewModelState.FailureScan -> {
-                Text(state.message)
+                Toast.makeText(context, state.message, Toast.LENGTH_SHORT).show()
             }
             is MainViewModelState.FailureBottle -> {
                 Text(state.message)
