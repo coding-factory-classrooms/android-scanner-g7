@@ -58,9 +58,10 @@ dependencies {
     implementation(libs.gson)
     implementation("androidx.navigation:navigation-compose:2.9.5")
 
-    // ✅ Coil Compose (pour AsyncImage)
     implementation("io.coil-kt:coil-compose:2.6.0")
 
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

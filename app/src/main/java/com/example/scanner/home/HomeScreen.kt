@@ -26,20 +26,55 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.scanner.OpenFoodFactApi
 import com.example.scanner.R
 import com.example.scanner.product.ProductListActivity
+import com.example.scanner.WikipediaApi
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+
+val client = OkHttpClient.Builder()
+    .addInterceptor { chain ->
+        val newRequest = chain.request().newBuilder()
+            .header("User-Agent", "MonApp/1.0 (contact@monemail.com)")
+            .build()
+        chain.proceed(newRequest)
+    }
+    .build()
+
+// premier call api sur cette url
+val retrofitOFF = Retrofit.Builder()
+    .baseUrl("https://world.openfoodfacts.org/api/v2/")
+    .addConverterFactory(GsonConverterFactory.create())
+    .build()
+// 2e call
+val retrofitWM = Retrofit.Builder()
+    .baseUrl("https://en.wikipedia.org/api/rest_v1/")
+    .addConverterFactory(GsonConverterFactory.create())
+    .client(client)
+    .build()
+
+
+val apiOFF = retrofitOFF.create(OpenFoodFactApi::class.java)
+
+val apiWM = retrofitWM.create(WikipediaApi::class.java)
+
 
 @Composable
-fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
+fun HomeScreen(homeViewModel: HomeViewModel = viewModel {
+    HomeViewModel(apiOFF, apiWM)
+}) {
     val context = LocalContext.current
     val uiState by homeViewModel.uiState.collectAsState()
     val isDebugMode by homeViewModel.isDebugMode.collectAsState()
 
     val barcodeLauncher = rememberLauncherForActivityResult(ScanContract()) { result ->
-        homeViewModel.onScanResult(result.contents)
+        homeViewModel.searchProduct(result.contents)
     }
+    // le result c est le bar_code
 
     Column(
         modifier = Modifier
@@ -64,9 +99,10 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
 
         Button(onClick = {
             if (isDebugMode) {
-                homeViewModel.onScanResult("1234567890")
                 val intent = Intent(context, ProductListActivity::class.java)
                 context.startActivity(intent)
+                homeViewModel.searchProduct("54491472")
+
             } else {
                 val options = ScanOptions()
                 options.setDesiredBarcodeFormats(ScanOptions.ALL_CODE_TYPES)
@@ -88,8 +124,8 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
         when (val state = uiState) {
             is MainViewModelState.Loading -> {
             }
-            is MainViewModelState.Success -> {
-                Text("Scanned code: ${state.bottle.barcode}")
+            is MainViewModelState.SuccessOFF -> {
+                Text("Scanned code: ${state}")
             }
             is MainViewModelState.FailureScan -> {
                 Toast.makeText(context, state.message, Toast.LENGTH_SHORT).show()
@@ -97,6 +133,10 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
             is MainViewModelState.FailureBottle -> {
                 Text(state.message)
             }
+
+            is MainViewModelState.SuccessWM ->
+                Text("Extract: ${state.extract}")
+
         }
     }
 }
