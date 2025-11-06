@@ -39,12 +39,52 @@ data class ProductResponse(
 
 
 data class Welcome (
-    val batchcomplete: Boolean,
-    val query: Query
+    val type: String,
+    val title: String,
+    val displaytitle: String,
+    val namespace: Namespace,
+    val wikibaseItem: String,
+    val titles: Titles,
+    val pageid: Long,
+    val thumbnail: Originalimage,
+    val originalimage: Originalimage,
+    val lang: String,
+    val dir: String,
+    val revision: String,
+    val tid: String,
+    val timestamp: String,
+    val description: String,
+    val descriptionSource: String,
+    val contentUrls: ContentUrls,
+    val extract: String,
+    val extractHTML: String
 )
 
-annotation class Query(val pages: String)
+data class ContentUrls (
+    val desktop: Desktop,
+    val mobile: Desktop
+)
 
-data class Page (
-    val extract: String
+data class Desktop (
+    val page: String,
+    val revisions: String,
+    val edit: String,
+    val talk: String
+)
+
+data class Namespace (
+    val id: Long,
+    val text: String
+)
+
+data class Originalimage (
+    val source: String,
+    val width: Long,
+    val height: Long
+)
+
+data class Titles (
+    val canonical: String,
+    val normalized: String,
+    val display: String
 )

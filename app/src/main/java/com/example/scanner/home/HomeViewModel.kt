@@ -5,7 +5,7 @@ import com.example.scanner.OpenFoodFactApi
 import com.example.scanner.Product
 import com.example.scanner.ProductResponse
 import com.example.scanner.Welcome
-import com.example.scanner.WikiMediaApi
+import com.example.scanner.WikipediaApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -16,13 +16,13 @@ import retrofit2.Response
 sealed class MainViewModelState {
     data object Loading : MainViewModelState()
     data class SuccessOFF(val product: Product?) : MainViewModelState()
-    data class SuccessWM(val page: String?) : MainViewModelState()
+    data class SuccessWM(val extract: String?) : MainViewModelState()
     data class FailureScan(val message: String) : MainViewModelState()
     data class FailureBottle(val message: String) : MainViewModelState()
 
 }
 
-class HomeViewModel(val apiOFF: OpenFoodFactApi, val apiWM: WikiMediaApi) : ViewModel() {
+class HomeViewModel(val apiOFF: OpenFoodFactApi, val apiWM: WikipediaApi) : ViewModel() {
 
     private val State = MutableStateFlow<MainViewModelState>(MainViewModelState.Loading)
     val uiState = State.asStateFlow()
@@ -42,7 +42,7 @@ class HomeViewModel(val apiOFF: OpenFoodFactApi, val apiWM: WikiMediaApi) : View
             override fun onResponse(call: Call<ProductResponse>, response: Response<ProductResponse>) {
                 val product = response.body()?.product
 
-
+                println(product?.brands)
                 searchExtract(product?.brands)
 //                Log.i(TAG, "onResponse: $product")
             }
@@ -55,35 +55,25 @@ class HomeViewModel(val apiOFF: OpenFoodFactApi, val apiWM: WikiMediaApi) : View
         })
     }
 
-    fun searchExtract(name: String) {
-        val call = apiWM.getPage()
+    fun searchExtract(name: String?) {
+
+        // Call api
+        val call = apiWM.getSummary(name)
+        println(call.request())
 
         call.enqueue(object : Callback<Welcome> {
             override fun onResponse(call: Call<Welcome>, response: Response<Welcome>) {
-                if (!response.isSuccessful) {
-                    State.value = MainViewModelState.FailureScan("Erreur HTTP ${response.code()}")
-                    return
-                }
-
-                // Si Query.pages est une List<Page>
-                val extractFromList = response.body()?.query?.pages?.firstOrNull()?.extract
-
-                // Si Query.pages est une Map<String, Page>
-                val extractFromMap = response.body()?.query?.pages?.values?.firstOrNull()?.extract
-
-                // Choisir l'un ou l'autre : on retourne le premier non-null trouvé
-                val extract = extractFromList ?: extractFromMap
-
-                if (extract != null) {
-                    State.value = MainViewModelState.SuccessWM(extract)
-                } else {
-                    State.value = MainViewModelState.FailureScan("Aucun extrait trouvé")
-                }
+                val extract = response.body()
+                println(extract)
+                State.value = MainViewModelState.SuccessWM(extract?.extract)
+//                Log.i(TAG, "onResponse: $product")
             }
 
             override fun onFailure(call: Call<Welcome>, t: Throwable) {
-                State.value = MainViewModelState.FailureScan("Erreur réseau : ${t.message}")
+//                Log.e(TAG, "onFailure: ", t)
+                State.value = MainViewModelState.FailureScan("error")
             }
+
         })
     }
 

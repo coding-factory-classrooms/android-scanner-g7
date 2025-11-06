@@ -27,12 +27,22 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.scanner.OpenFoodFactApi
 import com.example.scanner.R
-import com.example.scanner.WikiMediaApi
+import com.example.scanner.WikipediaApi
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+
+val client = OkHttpClient.Builder()
+    .addInterceptor { chain ->
+        val newRequest = chain.request().newBuilder()
+            .header("User-Agent", "MonApp/1.0 (contact@monemail.com)")
+            .build()
+        chain.proceed(newRequest)
+    }
+    .build()
 
 val retrofitOFF = Retrofit.Builder()
     .baseUrl("https://world.openfoodfacts.org/api/v2/")
@@ -40,13 +50,14 @@ val retrofitOFF = Retrofit.Builder()
     .build()
 
 val retrofitWM = Retrofit.Builder()
-    .baseUrl("https://fr.wikipedia.org/w/")
+    .baseUrl("https://en.wikipedia.org/api/rest_v1/")
     .addConverterFactory(GsonConverterFactory.create())
+    .client(client)
     .build()
 
 val apiOFF = retrofitOFF.create(OpenFoodFactApi::class.java)
 
-val apiWM = retrofitOFF.create(WikiMediaApi::class.java)
+val apiWM = retrofitWM.create(WikipediaApi::class.java)
 
 
 @Composable
@@ -84,7 +95,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel {
 
         Button(onClick = {
             if (isDebugMode) {
-                homeViewModel.searchProduct("1234567890")
+                homeViewModel.searchProduct("54491472")
             } else {
                 val options = ScanOptions()
                 options.setDesiredBarcodeFormats(ScanOptions.ALL_CODE_TYPES)
@@ -117,7 +128,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel {
             }
 
             is MainViewModelState.SuccessWM ->
-                Text("Extraact: ${state}")
+                Text("Extract: ${state.extract}")
 
         }
     }
