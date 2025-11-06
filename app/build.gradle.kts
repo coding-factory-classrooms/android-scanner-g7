@@ -54,6 +54,8 @@ android {
 }
 
 dependencies {
+    implementation("io.github.pilgr:paperdb:2.7.2")
+
     implementation(libs.zxing.android.embedded)
     implementation(libs.gson)
     implementation("androidx.navigation:navigation-compose:2.9.5")

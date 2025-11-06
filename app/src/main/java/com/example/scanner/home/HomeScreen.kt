@@ -25,6 +25,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.scanner.OpenFoodFactApi
 import com.example.scanner.Product
@@ -34,6 +35,7 @@ import com.example.scanner.WikipediaApi
 import com.google.gson.Gson
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
+import io.paperdb.Paper
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -76,6 +78,9 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel {
     val barcodeLauncher = rememberLauncherForActivityResult(ScanContract()) { result ->
         homeViewModel.searchProduct(result.contents)
     }
+
+    Paper.init(LocalContext.current);
+
     // le result c est le bar_code
 
     Column(

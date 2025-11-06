@@ -6,5 +6,5 @@ import retrofit2.http.Path
 
 interface WikipediaApi {
     @GET("page/summary/{title}")
-    fun getSummary(@Path("title") title: String?): Call<Welcome>
+    fun getSummary(@Path("title") title: String?): Call<Description>
 }

@@ -11,8 +11,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.scanner.ui.theme.ScannerTheme
+import io.paperdb.Paper
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

@@ -49,20 +49,7 @@ data class ProductResponse(
 
 
 
-data class Welcome (
-    val type: String,
+data class Description (
     val title: String,
-    val displaytitle: String,
-    val wikibaseItem: String,
-    val pageid: Long,
-    val lang: String,
-    val dir: String,
-    val revision: String,
-    val tid: String,
-    val timestamp: String,
-    val description: String,
-    val descriptionSource: String,
-    // c est la description
     val extract: String,
-    val extractHTML: String
 )

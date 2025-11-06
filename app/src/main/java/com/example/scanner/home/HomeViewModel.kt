@@ -1,14 +1,12 @@
 package com.example.scanner.home
 
-import android.content.Intent
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import com.example.scanner.OpenFoodFactApi
 import com.example.scanner.Product
 import com.example.scanner.ProductResponse
-import com.example.scanner.Welcome
+import com.example.scanner.Description
 import com.example.scanner.WikipediaApi
-import com.example.scanner.product.ProductListActivity
+import io.paperdb.Paper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -69,8 +67,8 @@ class HomeViewModel(val apiOFF: OpenFoodFactApi, val apiWM: WikipediaApi) : View
         val call = apiWM.getSummary(name)
         println(call.request())
 
-        call.enqueue(object : Callback<Welcome> {
-            override fun onResponse(call: Call<Welcome>, response: Response<Welcome>) {
+        call.enqueue(object : Callback<Description> {
+            override fun onResponse(call: Call<Description>, response: Response<Description>) {
                 val extract = response.body()
                 println(extract)
                 State.value = MainViewModelState.SuccessWM(extract?.extract)
@@ -78,7 +76,7 @@ class HomeViewModel(val apiOFF: OpenFoodFactApi, val apiWM: WikipediaApi) : View
 //                Log.i(TAG, "onResponse: $product")
             }
 
-            override fun onFailure(call: Call<Welcome>, t: Throwable) {
+            override fun onFailure(call: Call<Description>, t: Throwable) {
 //                Log.e(TAG, "onFailure: ", t)
                 State.value = MainViewModelState.FailureScan("error")
             }
@@ -100,5 +98,13 @@ class HomeViewModel(val apiOFF: OpenFoodFactApi, val apiWM: WikipediaApi) : View
         DebugMode.update { !it }
     }
 
+
+    fun setDescription(description: Description) {
+        Paper.book().write("description", description)
+    }
+
+    fun setProduct(product: Product) {
+        Paper.book().write("product", product);
+    }
 
 }
