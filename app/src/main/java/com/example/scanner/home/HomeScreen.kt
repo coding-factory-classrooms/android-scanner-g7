@@ -101,8 +101,6 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel {
 
         Button(onClick = {
             if (isDebugMode) {
-                val intent = Intent(context, ProductListActivity::class.java)
-                context.startActivity(intent)
                 homeViewModel.searchProduct("54491472")
 
             } else {
