@@ -1,7 +1,6 @@
 package com.example.scanner.product
 
 import android.content.Intent
-import android.telecom.Call
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -46,9 +45,8 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 
 
-
 @Composable
-fun ProductListScreen(vm: ProductViewModel = viewModel()) {
+fun ProductListScreen(vm: ProductViewModel = viewModel(), newProduct: Product? = null) {
 
     val uiState by vm.uiState.collectAsState()
     val context = LocalContext.current
@@ -57,6 +55,9 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
     LaunchedEffect(Unit) {
         println("ProductListScreen: LaunchedEffect")
         vm.loadProduct()
+        if (newProduct != null) {
+            vm.addProduct(newProduct)
+        }
     }
 
 

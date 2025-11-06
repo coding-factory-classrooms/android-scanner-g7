@@ -47,7 +47,8 @@ class HomeViewModel(val apiOFF: OpenFoodFactApi, val apiWM: WikipediaApi) : View
                 val product = response.body()?.product
             // si c'est success on recupere response.body
                 println(product?.brands)
-                searchExtract(product?.brands)
+                State.value = MainViewModelState.SuccessOFF(product)
+                //searchExtract(product?.brands)
                 //ici tu vas dans le 2e call api avec le nom en param
 //                Log.i(TAG, "onResponse: $product")
             }
