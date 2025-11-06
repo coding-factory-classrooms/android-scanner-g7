@@ -36,5 +36,15 @@ class ProductViewModel : ViewModel() {
                 state.product.find { it.id == productId }
             } else null
         }
+     fun addProduct(newProduct: Product) {
+         val current = uiState.value
+         if (current is ProductListUiState.Success) {
+             val newList = current.product.toMutableList()
+             newList.add(0, newProduct) // on le met en haut
+             uiState.value = ProductListUiState.Success(newList)
+         } else {
+             // sinon on crée une liste avec juste ce produit
+             uiState.value = ProductListUiState.Success(listOf(newProduct))
+         }
     }
 }

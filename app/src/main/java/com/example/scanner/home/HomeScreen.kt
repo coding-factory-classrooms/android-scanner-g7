@@ -27,8 +27,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.scanner.OpenFoodFactApi
+import com.example.scanner.Product
 import com.example.scanner.R
 import com.example.scanner.WikipediaApi
+import com.google.gson.Gson
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import okhttp3.OkHttpClient
@@ -128,19 +130,25 @@ fun HomeScreen(
         when (val state = uiState) {
             is MainViewModelState.Loading -> {
             }
+
             is MainViewModelState.SuccessOFF -> {
-                Text("Scanned code: ${state}")
+                val gson = Gson()
+                val productGson = gson.toJson(state.product)
+                val intent = Intent(context, ProductListActivity::class.java)
+                intent.putExtra("product_json",productGson)
+                context.startActivity(intent)
             }
+
             is MainViewModelState.FailureScan -> {
                 Toast.makeText(context, state.message, Toast.LENGTH_SHORT).show()
             }
+
             is MainViewModelState.FailureBottle -> {
                 Text(state.message)
             }
 
             is MainViewModelState.SuccessWM ->
                 Text("Extract: ${state.extract}")
-
         }
     }
 }

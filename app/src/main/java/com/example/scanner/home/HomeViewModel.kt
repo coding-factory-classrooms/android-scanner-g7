@@ -1,12 +1,14 @@
 package com.example.scanner.home
 
 import android.content.Intent
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import com.example.scanner.OpenFoodFactApi
 import com.example.scanner.Product
 import com.example.scanner.ProductResponse
 import com.example.scanner.Welcome
 import com.example.scanner.WikipediaApi
+import com.example.scanner.product.ProductListActivity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -45,7 +47,8 @@ class HomeViewModel(val apiOFF: OpenFoodFactApi, val apiWM: WikipediaApi) : View
                 val product = response.body()?.product
             // si c'est success on recupere response.body
                 println(product?.brands)
-                searchExtract(product?.brands)
+                State.value = MainViewModelState.SuccessOFF(product)
+                //searchExtract(product?.brands)
                 //ici tu vas dans le 2e call api avec le nom en param
 //                Log.i(TAG, "onResponse: $product")
             }

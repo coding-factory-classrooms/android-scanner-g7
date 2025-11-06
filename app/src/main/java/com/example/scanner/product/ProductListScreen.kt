@@ -1,7 +1,6 @@
 package com.example.scanner.product
 
 import android.content.Intent
-import android.telecom.Call
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -46,17 +45,24 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 
 
-
 @Composable
 fun ProductListScreen(
     vm: ProductViewModel = viewModel(),
-    onProductClick: (Product) -> Unit
+    onProductClick: (Product) -> Unit,
+  newProduct: Product? = null
 ) {
+
     val uiState by vm.uiState.collectAsState()
 
     // ⚡ Charger les produits une seule fois au lancement
     LaunchedEffect(Unit) {
-        vm.loadProduct()  // <- important pour que uiState devienne Success
+
+        println("ProductListScreen: LaunchedEffect")
+        vm.loadProduct()
+        if (newProduct != null) {
+            vm.addProduct(newProduct)
+        }
+
     }
 
     Scaffold { innerPadding ->
