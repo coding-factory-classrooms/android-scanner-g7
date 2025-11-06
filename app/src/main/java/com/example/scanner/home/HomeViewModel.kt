@@ -1,12 +1,14 @@
 package com.example.scanner.home
 
 import android.content.Intent
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import com.example.scanner.OpenFoodFactApi
 import com.example.scanner.Product
 import com.example.scanner.ProductResponse
 import com.example.scanner.Welcome
 import com.example.scanner.WikipediaApi
+import com.example.scanner.product.ProductListActivity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
