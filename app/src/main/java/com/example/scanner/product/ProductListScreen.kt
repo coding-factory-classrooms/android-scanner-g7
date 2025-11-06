@@ -48,125 +48,75 @@ import coil.request.ImageRequest
 
 
 @Composable
-fun ProductListScreen(vm: ProductViewModel = viewModel()) {
-
+fun ProductListScreen(
+    vm: ProductViewModel = viewModel(),
+    onProductClick: (Product) -> Unit
+) {
     val uiState by vm.uiState.collectAsState()
-    val context = LocalContext.current
-    // Executed only when the key param changes
-    // Unit == only once at the beginning
+
+    // ⚡ Charger les produits une seule fois au lancement
     LaunchedEffect(Unit) {
-        println("ProductListScreen: LaunchedEffect")
-        vm.loadProduct()
+        vm.loadProduct()  // <- important pour que uiState devienne Success
     }
 
-
-
     Scaffold { innerPadding ->
-
-
         Box(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
-            ) {
-                Button(
-                    onClick = {
-                        val intent = Intent(context, MainActivity::class.java)
-                        context.startActivity(intent)
-                    }
-                ) {
-                    Text("<- Return")
-                }
-
-                Spacer(modifier = Modifier.width(16.dp))
-
-                ProductScreenBody(uiState)
-
-            }
+            ProductScreenBody(uiState, onProductClick)
         }
     }
 }
 
+
 @Composable
-fun ProductScreenBody(uiState: ProductListUiState) {
+fun ProductScreenBody(uiState: ProductListUiState, onProductClick: (Product) -> Unit) {
     when (uiState) {
-        is ProductListUiState.Loading -> {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                CircularProgressIndicator()
-                Text(text = "Loading...")
-            }
-
-        }
-
+        is ProductListUiState.Loading -> { /* Loading UI */ }
         is ProductListUiState.Success -> {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.Top
-            ) {
-                ProductList(products = uiState.product)
-            }
+            ProductList(products = uiState.product, onProductClick = onProductClick)
         }
-
-        is ProductListUiState.Error -> {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(text = uiState.message)
-            }
-        }
+        is ProductListUiState.Error -> { /* Error UI */ }
     }
 }
 
+
 @Composable
-fun ProductList(products: List<Product>) {
+fun ProductList(products: List<Product>, onProductClick: (Product) -> Unit) {
     LazyColumn {
         items(products) { product ->
-            ProductCard(product = product)
+            ProductCard(product = product, onProductClick = onProductClick)
         }
-
     }
 }
+
 
 //@PreviewFontScale
 @Preview(showBackground = true)
 @Composable
 fun ProductCardPreview() {
     ScannerTheme {
-        ProductCard(product = sampleProduct.first())
+        ProductCard(
+            product = sampleProduct.first(),
+            onProductClick = {}
+        )
     }
 }
 
 
-@Composable
-fun ProductCard(product: Product) {
-    val context = LocalContext.current
 
+@Composable
+fun ProductCard(product: Product, onProductClick: (Product) -> Unit) {
     Row(
         modifier = Modifier.padding(all = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(product.imageFrontURL)
-                .crossfade(true)
-                .error(android.R.drawable.ic_menu_report_image)
-                .placeholder(android.R.drawable.ic_menu_gallery)
-                .build(),
+            model = product.imageFrontURL,
             contentDescription = "Product image",
-            modifier = Modifier
-                .size(50.dp)
-                .clip(RoundedCornerShape(10.dp))
+            modifier = Modifier.size(50.dp).clip(RoundedCornerShape(10.dp))
         )
 
         Spacer(modifier = Modifier.width(8.dp))
@@ -174,18 +124,12 @@ fun ProductCard(product: Product) {
             Text(text = product.brands, style = MaterialTheme.typography.titleSmall)
             Text(text = product.id, style = MaterialTheme.typography.bodyMedium)
         }
-        Spacer(modifier = Modifier.weight(1f)) // pousse le bouton à droite
 
-        Button(
-            onClick = {
-                val intent = Intent(context, MainActivity::class.java)
-//                intent.putExtra("bar_code", product.bar_code)
-                context.startActivity(intent)
-            }
-        ) {
+        Spacer(modifier = Modifier.weight(1f))
+
+        Button(onClick = { onProductClick(product) }) {
             Text("voir")
         }
-
     }
 }
 
@@ -206,7 +150,7 @@ fun ProductBodyPreview(
 ) {
     ScannerTheme() {
         Surface {
-            ProductScreenBody(uiState)
+            ProductScreenBody(uiState, onProductClick = {})
         }
     }
 }

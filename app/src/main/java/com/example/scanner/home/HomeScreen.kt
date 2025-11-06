@@ -28,13 +28,14 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.scanner.OpenFoodFactApi
 import com.example.scanner.R
-import com.example.scanner.product.ProductListActivity
 import com.example.scanner.WikipediaApi
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import androidx.navigation.NavHostController
+
 
 val client = OkHttpClient.Builder()
     .addInterceptor { chain ->
@@ -64,8 +65,11 @@ val apiWM = retrofitWM.create(WikipediaApi::class.java)
 
 
 @Composable
-fun HomeScreen(homeViewModel: HomeViewModel = viewModel {
-    HomeViewModel(apiOFF, apiWM)
+fun HomeScreen(
+    navController: NavHostController, // navController passé depuis AppNavigation
+
+    homeViewModel: HomeViewModel = viewModel {
+        HomeViewModel(apiOFF, apiWM)
 }) {
     val context = LocalContext.current
     val uiState by homeViewModel.uiState.collectAsState()
@@ -99,8 +103,8 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel {
 
         Button(onClick = {
             if (isDebugMode) {
-                val intent = Intent(context, ProductListActivity::class.java)
-                context.startActivity(intent)
+                navController.navigate("productList")
+
                 homeViewModel.searchProduct("54491472")
 
             } else {

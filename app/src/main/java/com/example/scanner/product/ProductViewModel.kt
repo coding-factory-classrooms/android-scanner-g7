@@ -30,4 +30,11 @@ class ProductViewModel : ViewModel() {
         productFlow.value = sampleProduct
 
     }
+    fun getProductById(productId: String?): Product? {
+        return uiState.value.let { state ->
+            if (state is ProductListUiState.Success) {
+                state.product.find { it.id == productId }
+            } else null
+        }
+    }
 }
