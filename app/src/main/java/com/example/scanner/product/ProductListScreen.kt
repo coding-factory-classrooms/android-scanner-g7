@@ -158,7 +158,7 @@ fun ProductCard(product: Product) {
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(product.image)
+                .data(product.imageFrontURL)
                 .crossfade(true)
                 .error(android.R.drawable.ic_menu_report_image)
                 .placeholder(android.R.drawable.ic_menu_gallery)
@@ -171,8 +171,8 @@ fun ProductCard(product: Product) {
 
         Spacer(modifier = Modifier.width(8.dp))
         Column {
-            Text(text = product.title, style = MaterialTheme.typography.titleSmall)
-            Text(text = product.bar_code, style = MaterialTheme.typography.bodyMedium)
+            Text(text = product.brands, style = MaterialTheme.typography.titleSmall)
+            Text(text = product.id, style = MaterialTheme.typography.bodyMedium)
         }
         Spacer(modifier = Modifier.weight(1f)) // pousse le bouton à droite
 

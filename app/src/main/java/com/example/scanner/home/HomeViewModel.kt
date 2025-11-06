@@ -1,5 +1,6 @@
 package com.example.scanner.home
 
+import android.content.Intent
 import androidx.lifecycle.ViewModel
 import com.example.scanner.OpenFoodFactApi
 import com.example.scanner.Product

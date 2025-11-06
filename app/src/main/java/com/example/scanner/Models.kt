@@ -9,12 +9,12 @@ import com.google.gson.annotations.SerializedName
 //)
 
 val sampleProduct = listOf(
-    Product("volvic","https://www.madeinchampeyroux.com/98-large_default/bouteille-d-eau.jpg","3", "1"),
-    Product("oasis","https://m.media-amazon.com/images/I/71cTmcXJ2+L._AC_SL1500_.jpg","3", "2"),
-    Product("ice tea","https://m.media-amazon.com/images/I/71cTmcXJ2+L._AC_SL1500_.jpg","3", "3"),
+    Product("1","volvic","https://www.madeinchampeyroux.com/98-large_default/bouteille-d-eau.jpg"),
+    Product("2","oasis","https://m.media-amazon.com/images/I/71cTmcXJ2+L._AC_SL1500_.jpg"),
+    Product("3","ice tea","https://m.media-amazon.com/images/I/71cTmcXJ2+L._AC_SL1500_.jpg"),
 
 
-    Product("Coca-cola","https://images.openfoodfacts.org/images/products/301/762/042/2003/front_en.633.200.jpg","4", "4")
+    Product("4","Coca-cola","https://images.openfoodfacts.org/images/products/301/762/042/2003/front_en.633.200.jpg")
 
 )
 
