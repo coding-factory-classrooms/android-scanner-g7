@@ -34,7 +34,6 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
 val client = OkHttpClient.Builder()
     .addInterceptor { chain ->
         val newRequest = chain.request().newBuilder()
@@ -44,16 +43,18 @@ val client = OkHttpClient.Builder()
     }
     .build()
 
+// premier call api sur cette url
 val retrofitOFF = Retrofit.Builder()
     .baseUrl("https://world.openfoodfacts.org/api/v2/")
     .addConverterFactory(GsonConverterFactory.create())
     .build()
-
+// 2e call
 val retrofitWM = Retrofit.Builder()
     .baseUrl("https://en.wikipedia.org/api/rest_v1/")
     .addConverterFactory(GsonConverterFactory.create())
     .client(client)
     .build()
+
 
 val apiOFF = retrofitOFF.create(OpenFoodFactApi::class.java)
 
@@ -71,6 +72,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel {
     val barcodeLauncher = rememberLauncherForActivityResult(ScanContract()) { result ->
         homeViewModel.searchProduct(result.contents)
     }
+    // le result c est le bar_code
 
     Column(
         modifier = Modifier

@@ -30,25 +30,28 @@ class HomeViewModel(val apiOFF: OpenFoodFactApi, val apiWM: WikipediaApi) : View
     private val DebugMode = MutableStateFlow(false)
     val isDebugMode = DebugMode.asStateFlow()
 
-
+// ca c'est les fonctions de call api, celle la c 'est la première
     fun searchProduct(barcode: String) {
 
 
         // Call api
         val call = apiOFF.getProduct(barcode)
 
-
+        //je sais plus c'est quoi précisement enqueue mais c'est un sorte de execute mais particulier
         call.enqueue(object : Callback<ProductResponse> {
+            // ensuite tu rentres dans 2 cas
             override fun onResponse(call: Call<ProductResponse>, response: Response<ProductResponse>) {
                 val product = response.body()?.product
-
+            // si c'est success on recupere response.body
                 println(product?.brands)
                 searchExtract(product?.brands)
+                //ici tu vas dans le 2e call api avec le nom en param
 //                Log.i(TAG, "onResponse: $product")
             }
 
             override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
 //                Log.e(TAG, "onFailure: ", t)
+                //sinon tu vas dans le statut failure
                 State.value = MainViewModelState.FailureScan("error")
             }
 
@@ -58,6 +61,7 @@ class HomeViewModel(val apiOFF: OpenFoodFactApi, val apiWM: WikipediaApi) : View
     fun searchExtract(name: String?) {
 
         // Call api
+        // et apres mm delire que en haut
         val call = apiWM.getSummary(name)
         println(call.request())
 
@@ -66,6 +70,7 @@ class HomeViewModel(val apiOFF: OpenFoodFactApi, val apiWM: WikipediaApi) : View
                 val extract = response.body()
                 println(extract)
                 State.value = MainViewModelState.SuccessWM(extract?.extract)
+                // et c'est ici que tu redirige vers ta page de liste avec du coup le product mais qui sera lie à la descritpion genre on a un objet produit et un autre description et la on va créer les produits et les afficher dans ta liste et quand on cliquera sur le produit on afficher les 2 produit + description sur un nouvelle ecran
 //                Log.i(TAG, "onResponse: $product")
             }
 

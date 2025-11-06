@@ -17,13 +17,16 @@ val sampleProduct = listOf(
 /////////////////////////////////////// OpenFoodfact Call API //////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
+
 data class Product (
     @SerializedName("_id")
     val id: String,
+    // ca c est le titre
     val brands: String,
     @SerializedName("image_front_url")
     val imageFrontURL: String
 )
+
 
 data class ProductResponse(
     val code: String,
@@ -38,16 +41,13 @@ data class ProductResponse(
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+
 data class Welcome (
     val type: String,
     val title: String,
     val displaytitle: String,
-    val namespace: Namespace,
     val wikibaseItem: String,
-    val titles: Titles,
     val pageid: Long,
-    val thumbnail: Originalimage,
-    val originalimage: Originalimage,
     val lang: String,
     val dir: String,
     val revision: String,
@@ -55,36 +55,7 @@ data class Welcome (
     val timestamp: String,
     val description: String,
     val descriptionSource: String,
-    val contentUrls: ContentUrls,
+    // c est la description
     val extract: String,
     val extractHTML: String
-)
-
-data class ContentUrls (
-    val desktop: Desktop,
-    val mobile: Desktop
-)
-
-data class Desktop (
-    val page: String,
-    val revisions: String,
-    val edit: String,
-    val talk: String
-)
-
-data class Namespace (
-    val id: Long,
-    val text: String
-)
-
-data class Originalimage (
-    val source: String,
-    val width: Long,
-    val height: Long
-)
-
-data class Titles (
-    val canonical: String,
-    val normalized: String,
-    val display: String
 )
