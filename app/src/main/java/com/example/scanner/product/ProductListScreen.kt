@@ -55,7 +55,7 @@ fun ProductListScreen(vm: ProductViewModel = viewModel(), newProduct: Product? =
     // Unit == only once at the beginning
     LaunchedEffect(Unit) {
         println("ProductListScreen: LaunchedEffect")
-        vm.loadProduct()
+        vm.getProduct()
         if (newProduct != null) {
             vm.addProduct(newProduct)
         }

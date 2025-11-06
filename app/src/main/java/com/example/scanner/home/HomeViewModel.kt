@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.update
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.collections.emptyList
 
 sealed class MainViewModelState {
     data object Loading : MainViewModelState()
@@ -45,6 +46,9 @@ class HomeViewModel(val apiOFF: OpenFoodFactApi, val apiWM: WikipediaApi) : View
                 val product = response.body()?.product
             // si c'est success on recupere response.body
                 println(product?.brands)
+                if (product != null){
+                    setProduct(product)
+                }
                 State.value = MainViewModelState.SuccessOFF(product)
                 //searchExtract(product?.brands)
                 //ici tu vas dans le 2e call api avec le nom en param
@@ -103,8 +107,10 @@ class HomeViewModel(val apiOFF: OpenFoodFactApi, val apiWM: WikipediaApi) : View
         Paper.book().write("description", description)
     }
 
+
     fun setProduct(product: Product) {
         Paper.book().write("product", product);
     }
+
 
 }
