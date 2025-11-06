@@ -27,22 +27,31 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.scanner.OpenFoodFactApi
 import com.example.scanner.R
+import com.example.scanner.WikiMediaApi
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-val retrofit = Retrofit.Builder()
+val retrofitOFF = Retrofit.Builder()
     .baseUrl("https://world.openfoodfacts.org/api/v2/")
     .addConverterFactory(GsonConverterFactory.create())
     .build()
 
-val api = retrofit.create(OpenFoodFactApi::class.java)
+val retrofitWM = Retrofit.Builder()
+    .baseUrl("https://fr.wikipedia.org/w/")
+    .addConverterFactory(GsonConverterFactory.create())
+    .build()
+
+val apiOFF = retrofitOFF.create(OpenFoodFactApi::class.java)
+
+val apiWM = retrofitOFF.create(WikiMediaApi::class.java)
+
 
 @Composable
 fun HomeScreen(homeViewModel: HomeViewModel = viewModel {
-    HomeViewModel(api)
+    HomeViewModel(apiOFF, apiWM)
 }) {
     val context = LocalContext.current
     val uiState by homeViewModel.uiState.collectAsState()
@@ -97,7 +106,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel {
         when (val state = uiState) {
             is MainViewModelState.Loading -> {
             }
-            is MainViewModelState.Success -> {
+            is MainViewModelState.SuccessOFF -> {
                 Text("Scanned code: ${state}")
             }
             is MainViewModelState.FailureScan -> {
@@ -106,6 +115,10 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel {
             is MainViewModelState.FailureBottle -> {
                 Text(state.message)
             }
+
+            is MainViewModelState.SuccessWM ->
+                Text("Extraact: ${state}")
+
         }
     }
 }

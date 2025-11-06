@@ -20,8 +20,7 @@ val sampleProduct = listOf(
 data class Product (
     @SerializedName("_id")
     val id: String,
-    @SerializedName("abbreviated_product_name_fr")
-    val abbreviatedProductNameFr: String,
+    val brands: String,
     @SerializedName("image_front_url")
     val imageFrontURL: String
 )
@@ -39,7 +38,13 @@ data class ProductResponse(
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+data class Welcome (
+    val batchcomplete: Boolean,
+    val query: Query
+)
+
+annotation class Query(val pages: String)
+
 data class Page (
-    val title: String,
     val extract: String
 )
