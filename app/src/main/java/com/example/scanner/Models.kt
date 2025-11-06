@@ -1,16 +1,15 @@
 package com.example.scanner
 import com.google.gson.annotations.SerializedName
-import java.net.URL
 
-data class Product(
-    val title : String,
-    val image: String,
-    val description: String,
-    val bar_code: String
-)
+//data class Product(
+//    val title : String,
+//    val image: String,
+//    val description: String,
+//    val bar_code: String
+//)
 
 val sampleProduct = listOf(
-    Product("1","2","3", "4")
+    Product("1","2","https://fr.wikipedia.org/wiki/Wikip%C3%A9dia:Accueil_principal#/media/Fichier:20220702_Araschnia_levana_02.jpg")
 )
 
 
@@ -18,12 +17,21 @@ val sampleProduct = listOf(
 /////////////////////////////////////// OpenFoodfact Call API //////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-data class InfoProduct (
+
+data class Product (
+    @SerializedName("_id")
     val id: String,
-    @SerializedName("product_name_fr")
-    val productNameFr: String,
+    // ca c est le titre
+    val brands: String,
     @SerializedName("image_front_url")
-    val imageFrontURL: URL
+    val imageFrontURL: String
+)
+
+
+data class ProductResponse(
+    val code: String,
+    val status: Int,
+    val product: Product
 )
 
 
@@ -33,7 +41,21 @@ data class InfoProduct (
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-data class Page (
+
+data class Welcome (
+    val type: String,
     val title: String,
-    val extract: String
+    val displaytitle: String,
+    val wikibaseItem: String,
+    val pageid: Long,
+    val lang: String,
+    val dir: String,
+    val revision: String,
+    val tid: String,
+    val timestamp: String,
+    val description: String,
+    val descriptionSource: String,
+    // c est la description
+    val extract: String,
+    val extractHTML: String
 )
