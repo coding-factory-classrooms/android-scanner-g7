@@ -31,18 +31,21 @@ class ProductViewModel : ViewModel() {
         productFlow.value = sampleProduct
 
     }
-     fun addProduct(newProduct: Product) {
-         val current = uiState.value
-         if (current is ProductListUiState.Success) {
-             val newList = current.product.toMutableList()
-             newList.add(0, newProduct) // on le met en haut
-             uiState.value = ProductListUiState.Success(newList)
-         } else {
-             // sinon on crée une liste avec juste ce produit
-             uiState.value = ProductListUiState.Success(listOf(newProduct))
-         }
+    fun addProduct(newProduct: Product) {
+        val currentList = (Paper.book().read("products", emptyList<Product>()) ?: emptyList<Product>()).toMutableList()
+        currentList.add(0, newProduct)
+        Paper.book().write("products", currentList)
+        uiState.value = ProductListUiState.Success(currentList)
     }
+
+
     fun getProduct(): List<Product>?{
-        return Paper.book().read<List<Product>>("product", emptyList())
+        return Paper.book().read("products", emptyList<Product>())
     }
+
+    fun getProductSize(): Int {
+        return getProduct() ?.size ?: 0
+    }
+
+
 }

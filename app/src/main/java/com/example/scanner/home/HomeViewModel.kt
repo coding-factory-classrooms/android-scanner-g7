@@ -46,9 +46,7 @@ class HomeViewModel(val apiOFF: OpenFoodFactApi, val apiWM: WikipediaApi) : View
                 val product = response.body()?.product
             // si c'est success on recupere response.body
                 println(product?.brands)
-                if (product != null){
-                    setProduct(product)
-                }
+
                 State.value = MainViewModelState.SuccessOFF(product)
                 //searchExtract(product?.brands)
                 //ici tu vas dans le 2e call api avec le nom en param
@@ -109,8 +107,12 @@ class HomeViewModel(val apiOFF: OpenFoodFactApi, val apiWM: WikipediaApi) : View
 
 
     fun setProduct(product: Product) {
-        Paper.book().write("product", product);
+        val currentList = (Paper.book().read("products", emptyList<Product>()) ?: emptyList()).toMutableList()
+        currentList.add(0, product)
+
+        Paper.book().write("products", currentList)
     }
+
 
 
 }

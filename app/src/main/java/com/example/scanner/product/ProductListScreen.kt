@@ -85,6 +85,8 @@ fun ProductListScreen(vm: ProductViewModel = viewModel(), newProduct: Product? =
                     Text("<- Return")
                 }
 
+                Text(text = vm.getProductSize().toString())
+
                 Spacer(modifier = Modifier.width(16.dp))
 
                 ProductScreenBody(uiState)
