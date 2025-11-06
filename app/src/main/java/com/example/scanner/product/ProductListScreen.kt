@@ -1,9 +1,7 @@
 package com.example.scanner.product
 
 import android.content.Intent
-import android.widget.Toast
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import android.telecom.Call
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,7 +34,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
@@ -45,6 +42,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.scanner.home.MainActivity
 import com.example.scanner.ui.theme.ScannerTheme
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+
 
 
 @Composable
@@ -86,6 +86,7 @@ fun ProductListScreen(vm: ProductViewModel = viewModel()) {
                 Spacer(modifier = Modifier.width(16.dp))
 
                 ProductScreenBody(uiState)
+
             }
         }
     }
@@ -149,21 +150,40 @@ fun ProductCardPreview() {
 
 @Composable
 fun ProductCard(product: Product) {
+    val context = LocalContext.current
+
     Row(
         modifier = Modifier.padding(all = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-//        Image(
-//            painter = painterResource(id = movie.posterId),
-//            contentDescription = "Movie poster",
-//            modifier = Modifier
-//                .size(50.dp)
-//                .clip(RoundedCornerShape(10.dp))
-//        )
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(product.image)
+                .crossfade(true)
+                .error(android.R.drawable.ic_menu_report_image)
+                .placeholder(android.R.drawable.ic_menu_gallery)
+                .build(),
+            contentDescription = "Product image",
+            modifier = Modifier
+                .size(50.dp)
+                .clip(RoundedCornerShape(10.dp))
+        )
+
         Spacer(modifier = Modifier.width(8.dp))
         Column {
             Text(text = product.title, style = MaterialTheme.typography.titleSmall)
             Text(text = product.bar_code, style = MaterialTheme.typography.bodyMedium)
+        }
+        Spacer(modifier = Modifier.weight(1f)) // pousse le bouton à droite
+
+        Button(
+            onClick = {
+                val intent = Intent(context, MainActivity::class.java)
+//                intent.putExtra("bar_code", product.bar_code)
+                context.startActivity(intent)
+            }
+        ) {
+            Text("voir")
         }
 
     }

@@ -10,12 +10,12 @@ data class Product(
 )
 
 val sampleProduct = listOf(
-    Product("1","2","3", "4"),
-    Product("salut toi","2","3", "4"),
-    Product("wesh c'est comment","2","3", "4"),
+    Product("volvic","https://www.madeinchampeyroux.com/98-large_default/bouteille-d-eau.jpg","3", "1"),
+    Product("oasis","https://m.media-amazon.com/images/I/71cTmcXJ2+L._AC_SL1500_.jpg","3", "2"),
+    Product("ice tea","https://m.media-amazon.com/images/I/71cTmcXJ2+L._AC_SL1500_.jpg","3", "3"),
 
 
-    Product("1","2","3", "4")
+    Product("Coca-cola","https://images.openfoodfacts.org/images/products/301/762/042/2003/front_en.633.200.jpg","4", "4")
 )
 
 
@@ -28,7 +28,7 @@ data class InfoProduct (
     @SerializedName("product_name_fr")
     val productNameFr: String,
     @SerializedName("image_front_url")
-    val imageFrontURL: URL
+    val imageFrontURL: String
 )
 
 
