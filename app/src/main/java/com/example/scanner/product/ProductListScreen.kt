@@ -43,6 +43,7 @@ import com.example.scanner.home.MainActivity
 import com.example.scanner.ui.theme.ScannerTheme
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.google.gson.Gson
 
 
 @Composable
@@ -179,8 +180,9 @@ fun ProductCard(product: Product) {
 
         Button(
             onClick = {
-                val intent = Intent(context, MainActivity::class.java)
-//                intent.putExtra("bar_code", product.bar_code)
+                val productJson = Gson().toJson(product)
+                val intent = Intent(context, ProductDetailActivity::class.java)
+                intent.putExtra("product_json", productJson)
                 context.startActivity(intent)
             }
         ) {

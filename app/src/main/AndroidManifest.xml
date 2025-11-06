@@ -27,6 +27,8 @@
             android:name=".product.ProductListActivity"
             android:exported="false"
              />
+        <activity android:name=".product.ProductDetailActivity" />
+
     </application>
 
 </manifest>
