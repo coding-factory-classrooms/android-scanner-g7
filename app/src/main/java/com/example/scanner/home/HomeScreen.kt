@@ -44,7 +44,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 val client = OkHttpClient.Builder()
     .addInterceptor { chain ->
         val newRequest = chain.request().newBuilder()
-            .header("User-Agent", "MonApp/1.0 (contact@monemail.com)")
+            .header("User-Agent", "MonApp/1.0 (zob@gmail.com)")
             .build()
         chain.proceed(newRequest)
     }
