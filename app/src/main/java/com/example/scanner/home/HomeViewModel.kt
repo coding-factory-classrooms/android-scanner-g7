@@ -101,17 +101,17 @@ class HomeViewModel(val apiOFF: OpenFoodFactApi, val apiWM: WikipediaApi) : View
     }
 
 
-    fun setDescription(description: Description) {
-        Paper.book().write("description", description)
-    }
+//    fun setDescription(description: Description) {
+//        Paper.book().write("description", description)
+//    }
 
 
-    fun setProduct(product: Product) {
-        val currentList = (Paper.book().read("products", emptyList<Product>()) ?: emptyList()).toMutableList()
-        currentList.add(0, product)
-
-        Paper.book().write("products", currentList)
-    }
+//    fun setProduct(product: Product) {
+//        val currentList = (Paper.book().read("products", emptyList<Product>()) ?: emptyList()).toMutableList()
+//        currentList.add(0, product)
+//
+//        Paper.book().write("products", currentList)
+//    }
 
 
 
