@@ -19,12 +19,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.scanner.OpenFoodFactApi
 import com.example.scanner.Product
@@ -34,6 +36,7 @@ import com.example.scanner.WikipediaApi
 import com.google.gson.Gson
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
+import io.paperdb.Paper
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -52,22 +55,14 @@ val retrofitOFF = Retrofit.Builder()
     .baseUrl("https://world.openfoodfacts.org/api/v2/")
     .addConverterFactory(GsonConverterFactory.create())
     .build()
-// 2e call
-val retrofitWM = Retrofit.Builder()
-    .baseUrl("https://en.wikipedia.org/api/rest_v1/")
-    .addConverterFactory(GsonConverterFactory.create())
-    .client(client)
-    .build()
-
 
 val apiOFF = retrofitOFF.create(OpenFoodFactApi::class.java)
 
-val apiWM = retrofitWM.create(WikipediaApi::class.java)
 
 
 @Composable
 fun HomeScreen(homeViewModel: HomeViewModel = viewModel {
-    HomeViewModel(apiOFF, apiWM)
+    HomeViewModel(apiOFF)
 }) {
     val context = LocalContext.current
     val uiState by homeViewModel.uiState.collectAsState()
@@ -76,6 +71,9 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel {
     val barcodeLauncher = rememberLauncherForActivityResult(ScanContract()) { result ->
         homeViewModel.searchProduct(result.contents)
     }
+
+    Paper.init(LocalContext.current);
+
     // le result c est le bar_code
 
     Column(

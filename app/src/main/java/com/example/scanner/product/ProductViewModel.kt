@@ -3,6 +3,7 @@ package com.example.scanner.product
 import androidx.lifecycle.ViewModel
 import com.example.scanner.Product
 import com.example.scanner.sampleProduct
+import io.paperdb.Paper
 import kotlinx.coroutines.flow.MutableStateFlow
 
 sealed class ProductListUiState {
@@ -30,15 +31,22 @@ class ProductViewModel : ViewModel() {
         productFlow.value = sampleProduct
 
     }
-     fun addProduct(newProduct: Product) {
-         val current = uiState.value
-         if (current is ProductListUiState.Success) {
-             val newList = current.product.toMutableList()
-             newList.add(0, newProduct) // on le met en haut
-             uiState.value = ProductListUiState.Success(newList)
-         } else {
-             // sinon on crée une liste avec juste ce produit
-             uiState.value = ProductListUiState.Success(listOf(newProduct))
-         }
+    fun addProduct(newProduct: Product) {
+        println(newProduct)
+        val currentList = (Paper.book().read("products", emptyList<Product>()) ?: emptyList<Product>()).toMutableList()
+        currentList.add(0, newProduct)
+        Paper.book().write("products", currentList)
+        uiState.value = ProductListUiState.Success(currentList)
     }
+
+
+    fun getProduct(): List<Product>?{
+        return Paper.book().read("products", emptyList<Product>())
+    }
+
+    fun getProductSize(): Int {
+        return getProduct() ?.size ?: 0
+    }
+
+
 }
