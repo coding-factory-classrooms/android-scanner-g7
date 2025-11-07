@@ -27,7 +27,7 @@
             android:name=".product.ProductListActivity"
             android:exported="false"
              />
-        <activity android:name=".product.ProductDetailActivity" />
+        <activity android:name=".detail.ProductDetailActivity" />
 
     </application>
 

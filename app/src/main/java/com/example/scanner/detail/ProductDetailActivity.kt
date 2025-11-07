@@ -1,4 +1,4 @@
-package com.example.scanner.product
+package com.example.scanner.detail
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

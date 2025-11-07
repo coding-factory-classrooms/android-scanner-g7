@@ -1,8 +1,8 @@
-package com.example.scanner.product
+package com.example.scanner.detail
 
 
+import android.R
 import android.app.Activity
-import android.content.Intent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,11 +23,9 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.unit.Dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.scanner.Product
 import com.example.scanner.WikipediaApi
-import com.example.scanner.home.MainActivity
 import com.example.scanner.home.client
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -75,8 +73,8 @@ fun ProductDetailScreen(vm: ProductDetailViewModel = viewModel() { ProductDetail
             model = ImageRequest.Builder(LocalContext.current)
                 .data(product.imageFrontURL)
                 .crossfade(true)
-                .placeholder(android.R.drawable.ic_menu_gallery)
-                .error(android.R.drawable.ic_menu_report_image)
+                .placeholder(R.drawable.ic_menu_gallery)
+                .error(R.drawable.ic_menu_report_image)
                 .build(),
             contentDescription = "Product image",
             modifier = Modifier

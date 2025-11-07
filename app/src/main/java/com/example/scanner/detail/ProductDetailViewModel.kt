@@ -1,4 +1,4 @@
-package com.example.scanner.product
+package com.example.scanner.detail
 
 import androidx.lifecycle.ViewModel
 import com.example.scanner.Description
