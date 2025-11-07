@@ -32,6 +32,7 @@ class ProductViewModel : ViewModel() {
 
     }
     fun addProduct(newProduct: Product) {
+        println(newProduct)
         val currentList = (Paper.book().read("products", emptyList<Product>()) ?: emptyList<Product>()).toMutableList()
         currentList.add(0, newProduct)
         Paper.book().write("products", currentList)
