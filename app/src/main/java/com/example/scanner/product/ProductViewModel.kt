@@ -31,13 +31,26 @@ class ProductViewModel : ViewModel() {
         productFlow.value = sampleProduct
 
     }
-    fun addProduct(newProduct: Product) {
-        println(newProduct)
-        val currentList = (Paper.book().read("products", emptyList<Product>()) ?: emptyList<Product>()).toMutableList()
-        currentList.add(0, newProduct)
-        Paper.book().write("products", currentList)
-        uiState.value = ProductListUiState.Success(currentList)
+    fun addProductIfNotExists(newProduct: Product) {
+        val currentList = (Paper.book().read("products", emptyList<Product>()) ?: emptyList()).toMutableList()
+
+        val alreadyThere = currentList.any { it.id == newProduct.id }
+        if (!alreadyThere) {
+            currentList.add(0, newProduct)
+            Paper.book().write("products", currentList)
+        }
+
+
+    fun loadProductsFromStorage() {
+        val products = Paper.book().read("products", emptyList<Product>()) ?: emptyList()
+        uiState.value = ProductListUiState.Success(products)
     }
+//    fun addProduct(newProduct: Product) {
+//        val currentList = (Paper.book().read("products", emptyList<Product>()) ?: emptyList()).toMutableList()
+//        currentList.add(0, newProduct)
+//        Paper.book().write("products", currentList)
+//        uiState.value = ProductListUiState.Success(currentList)
+//    }
 
 
     fun getProduct(): List<Product>?{

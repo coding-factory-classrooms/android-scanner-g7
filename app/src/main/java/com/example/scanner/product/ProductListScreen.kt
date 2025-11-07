@@ -54,12 +54,12 @@ fun ProductListScreen(vm: ProductViewModel = viewModel(), newProduct: Product? =
     // Executed only when the key param changes
     // Unit == only once at the beginning
     LaunchedEffect(Unit) {
-        println("ProductListScreen: LaunchedEffect")
-        vm.getProduct()
+        vm.loadProductsFromStorage()
         if (newProduct != null) {
-            vm.addProduct(newProduct)
+            vm.addProductIfNotExists(newProduct)
         }
     }
+
 
 
 
