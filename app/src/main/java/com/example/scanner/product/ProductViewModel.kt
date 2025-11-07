@@ -32,13 +32,15 @@ class ProductViewModel : ViewModel() {
 
     }
     fun addProductIfNotExists(newProduct: Product) {
-        val currentList = (Paper.book().read("products", emptyList<Product>()) ?: emptyList()).toMutableList()
+        val currentList =
+            (Paper.book().read("products", emptyList<Product>()) ?: emptyList()).toMutableList()
 
         val alreadyThere = currentList.any { it.id == newProduct.id }
         if (!alreadyThere) {
             currentList.add(0, newProduct)
             Paper.book().write("products", currentList)
         }
+    }
 
 
     fun loadProductsFromStorage() {
@@ -62,8 +64,10 @@ class ProductViewModel : ViewModel() {
     }
 
     fun suppProduct(product: Product) {
-        Paper.book().delete("products");
+        val currentList = (Paper.book().read("products", emptyList<Product>()) ?: emptyList()).toMutableList()
+        currentList.remove(product)
+        Paper.book().write("products", currentList)
+        uiState.value = ProductListUiState.Success(currentList)
+
     }
-
-
 }
