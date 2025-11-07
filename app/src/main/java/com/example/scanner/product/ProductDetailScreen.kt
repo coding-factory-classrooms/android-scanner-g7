@@ -59,9 +59,10 @@ fun ProductDetailScreen(vm: ProductDetailViewModel = viewModel() { ProductDetail
     ) {
         Button(
             onClick = {
-                val intent = Intent(context, ProductDetailActivity::class.java)
-                context.startActivity(intent)
                 (context as Activity).finish()
+//                val intent = Intent(context, ProductDetailActivity::class.java)
+//                context.startActivity(intent)
+//                (context as Activity).finish()
             }
         ) {
             Text("<- Return")

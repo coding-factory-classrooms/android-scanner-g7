@@ -199,7 +199,7 @@ fun ProductCard(vm: ProductViewModel = viewModel(), product: Product) {
                 }
             }
         ) {
-            Text("supprime")
+            Text("\uD83D\uDDD1\uFE0F")
         }
 
     }
