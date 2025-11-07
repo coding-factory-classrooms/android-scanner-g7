@@ -39,6 +39,7 @@ class ProductViewModel : ViewModel() {
         if (!alreadyThere) {
             currentList.add(0, newProduct)
             Paper.book().write("products", currentList)
+            uiState.value = ProductListUiState.Success(currentList)
         }
     }
 
