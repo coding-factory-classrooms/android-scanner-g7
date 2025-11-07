@@ -24,7 +24,7 @@ sealed class MainViewModelState {
 
 }
 
-class HomeViewModel(val apiOFF: OpenFoodFactApi, val apiWM: WikipediaApi) : ViewModel() {
+class HomeViewModel(val apiOFF: OpenFoodFactApi) : ViewModel() {
 
     private val State = MutableStateFlow<MainViewModelState>(MainViewModelState.Loading)
     val uiState = State.asStateFlow()
@@ -56,30 +56,6 @@ class HomeViewModel(val apiOFF: OpenFoodFactApi, val apiWM: WikipediaApi) : View
             override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
 //                Log.e(TAG, "onFailure: ", t)
                 //sinon tu vas dans le statut failure
-                State.value = MainViewModelState.FailureScan("error")
-            }
-
-        })
-    }
-
-    fun searchExtract(name: String?) {
-
-        // Call api
-        // et apres mm delire que en haut
-        val call = apiWM.getSummary(name)
-        println(call.request())
-
-        call.enqueue(object : Callback<Description> {
-            override fun onResponse(call: Call<Description>, response: Response<Description>) {
-                val extract = response.body()
-                println(extract)
-                State.value = MainViewModelState.SuccessWM(extract?.extract)
-                // et c'est ici que tu redirige vers ta page de liste avec du coup le product mais qui sera lie à la descritpion genre on a un objet produit et un autre description et la on va créer les produits et les afficher dans ta liste et quand on cliquera sur le produit on afficher les 2 produit + description sur un nouvelle ecran
-//                Log.i(TAG, "onResponse: $product")
-            }
-
-            override fun onFailure(call: Call<Description>, t: Throwable) {
-//                Log.e(TAG, "onFailure: ", t)
                 State.value = MainViewModelState.FailureScan("error")
             }
 

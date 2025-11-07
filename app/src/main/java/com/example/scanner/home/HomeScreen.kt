@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -54,22 +55,14 @@ val retrofitOFF = Retrofit.Builder()
     .baseUrl("https://world.openfoodfacts.org/api/v2/")
     .addConverterFactory(GsonConverterFactory.create())
     .build()
-// 2e call
-val retrofitWM = Retrofit.Builder()
-    .baseUrl("https://en.wikipedia.org/api/rest_v1/")
-    .addConverterFactory(GsonConverterFactory.create())
-    .client(client)
-    .build()
-
 
 val apiOFF = retrofitOFF.create(OpenFoodFactApi::class.java)
 
-val apiWM = retrofitWM.create(WikipediaApi::class.java)
 
 
 @Composable
 fun HomeScreen(homeViewModel: HomeViewModel = viewModel {
-    HomeViewModel(apiOFF, apiWM)
+    HomeViewModel(apiOFF)
 }) {
     val context = LocalContext.current
     val uiState by homeViewModel.uiState.collectAsState()

@@ -40,8 +40,7 @@ class ProductViewModel : ViewModel() {
             Paper.book().write("products", currentList)
         }
 
-        uiState.value = ProductListUiState.Success(currentList)
-    }
+
     fun loadProductsFromStorage() {
         val products = Paper.book().read("products", emptyList<Product>()) ?: emptyList()
         uiState.value = ProductListUiState.Success(products)
