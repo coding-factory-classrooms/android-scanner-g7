@@ -28,6 +28,7 @@ import com.example.scanner.sampleProduct
 import com.example.scanner.Product
 
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 
 
 import androidx.compose.ui.Alignment
@@ -44,6 +45,7 @@ import com.example.scanner.ui.theme.ScannerTheme
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.gson.Gson
+import io.paperdb.Paper
 
 
 @Composable
@@ -153,7 +155,7 @@ fun ProductCardPreview() {
 
 
 @Composable
-fun ProductCard(product: Product) {
+fun ProductCard(vm: ProductViewModel = viewModel(), product: Product) {
     val context = LocalContext.current
 
     Row(
@@ -189,6 +191,15 @@ fun ProductCard(product: Product) {
             }
         ) {
             Text("voir")
+        }
+        Button(
+            onClick = {
+                if (product != null) {
+                    vm.suppProduct(product)
+                }
+            }
+        ) {
+            Text("supprime")
         }
 
     }

@@ -47,5 +47,9 @@ class ProductViewModel : ViewModel() {
         return getProduct() ?.size ?: 0
     }
 
+    fun suppProduct(product: Product) {
+        Paper.book().delete("products");
+    }
+
 
 }
